@@ -286,13 +286,14 @@ classdef syncVideos
                 fprintf('>> Loading audio tracks from file\n');
                 tmp = load(a1);
                 this.audio1 = tmp.audioTrack1;
+                Fs = tmp.Fs;
                 
                 tmp = load(a2);
                 this.audio2 = tmp.audioTrack2;
             end
             
             this.totalAudioSamples = min([length(this.audio1) length(this.audio2)]);
-            this.audioSamplingFrequency = tmp.Fs;
+            this.audioSamplingFrequency = Fs;
 
             %% Find delay for each frame in this.frames
             this.lag = [];

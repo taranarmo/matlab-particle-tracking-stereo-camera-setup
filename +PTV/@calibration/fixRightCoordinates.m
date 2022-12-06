@@ -10,7 +10,7 @@ function this = fixRightCoordinates(this)
         tmp = strsplit(fName, '_');
         F1 = str2double(tmp{end});
 
-        I = find(this.lagData.lag.F1 == F1);
+        I = find(this.lagData.lag.F1 >= F1, 1, 'first');
         if(isempty(I))
             error('Cannot find delay data for frame #%d', F1);
         end
@@ -40,7 +40,7 @@ function this = fixRightCoordinates(this)
             else
                 for c=1:2 % x and y
                     % slope
-                    mik_x = this.imageRightPoints(:, c, fr) - this.imagePointsRightMinus(:, c, fr);
+                    mik_x = this.imagePointsRight(:, c, fr) - this.imagePointsRightMinus(:, c, fr);
                     this.imagePointsRight(:, c, fr) = this.imagePointsRight(:, c, fr) + mik_x*tau;
                 end                
             end

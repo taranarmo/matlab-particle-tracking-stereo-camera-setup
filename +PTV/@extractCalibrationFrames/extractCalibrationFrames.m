@@ -98,6 +98,7 @@ classdef extractCalibrationFrames
             frameNumber.right = this.getRightFrameIdx(frameNumber.left);
 
             leftFrame = this.readFrame(leftVideoObj, frameNumber.left);
+            frameNumber.left
             rightFrame = this.readFrame(rightVideoObj, frameNumber.right);
 
             if(this.rotateLeftVideo)

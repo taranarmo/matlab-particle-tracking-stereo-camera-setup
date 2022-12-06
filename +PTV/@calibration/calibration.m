@@ -439,6 +439,8 @@ classdef calibration
             if(isempty(this.checkFrameNumber)) % get first available frame
                 tmp = strsplit(this.fileNames{1}, 'f');
                 frameIdx = tmp{end};
+                tmp = strsplit(frameIdx, '_');
+                frameIdx = str2num(tmp{1});
             else
                 frameIdx = this.findFrameById();
             end
@@ -517,7 +519,7 @@ function [framesPath, squareSize, lagParamsFile, name, exclude, saveSummary, che
     disparityBlockSize, disparityContrastThreshold, disparityUniquenessThreshold, ...
     disparityMax] = validateAndParseInputs(varargin)
     % Validate and parse inputs
-    narginchk(7, 15);
+    % narginchk(7, 15);
 
     parser = inputParser;
     parser.CaseSensitive = false;

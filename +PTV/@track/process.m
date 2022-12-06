@@ -23,7 +23,7 @@ function [this] = process(this)
 
     %% Loop through the frames
     this.GUI.fig.Units = 'normalized';
-    this.GUI.fig.Position(1) = 0.71; 
+    this.GUI.fig.Position(1) = 0.71;
     this.GUI.fig.Position(2) = 0.64;
     fDect = waitbar(0, 'Plese wait...', 'Units', 'normalized', ...
         'Position', [0.71 0.36 0.1875 0.0625]);
@@ -57,7 +57,7 @@ function [this] = process(this)
             currentFile.left = this.video.leftVideos{this.step.fileIndex.left};
 
             this.logStatus(sprintf('Opening next left video #%d (%s)', ...
-                this.step.fileIndex.left, currentFile.left.fileName));  
+                this.step.fileIndex.left, currentFile.left.fileName));
 
             this.video.left = this.readVideoFile(currentFile.left.fullFile);
 
@@ -76,7 +76,7 @@ function [this] = process(this)
             currentFile.right = this.video.rightVideos{this.step.fileIndex.right};
 
             this.logStatus(sprintf('Opening next right video #%d (%s)', ...
-                this.step.fileIndex.right, currentFile.right.fileName));   
+                this.step.fileIndex.right, currentFile.right.fileName));
             this.video.right = this.readVideoFile(currentFile.right.fullFile);
         end
 
@@ -90,7 +90,7 @@ function [this] = process(this)
         % global
         frac = k/this.numberOfFrames.toProcess;
         avgDuration = this.formatDuration(avgTime);
-        
+
         set(this.GUI.labels.global.Step, 'String', ...
             sprintf('%d/%d (%d%%)', k, this.numberOfFrames.toProcess, round(frac*100)));
         set(this.GUI.labels.global.TotalTracks, 'String', sprintf('%d/%d (%d)', ...
@@ -109,11 +109,11 @@ function [this] = process(this)
             sprintf('%.0f/%d (%d%%)', this.step.leftFrameId, yy, round(fracL*100)));
         set(this.GUI.labels.leftVideo.LeftTime, 'String', sprintf('%s', ...
             (round(yy - this.step.leftFrameId)/this.video.actualFrameStep) * avgDuration));
-        
+
         % right video
         yy = this.numberOfFrames.right(this.step.fileIndex.right);
         fracR = this.step.rightFrameId/yy;
-        
+
         set(this.GUI.labels.rightVideo.OpenVideo, 'String', ...
             sprintf('#%d - %s', this.step.fileIndex.right, currentFile.right.fileName));
         set(this.GUI.labels.rightVideo.CurrentFrame, 'String', ...
@@ -158,7 +158,7 @@ function [this] = process(this)
         set(this.GUI.labels.rightVideo.TotalParticles, 'String', sprintf('%d/%d', ...
             height(this.step.rightParticles), this.blobDetectionSettings.maximumCount));
         drawnow;
-        
+
         % train the foreground detection algorithm and skip these frames
         if(k <= this.numberOfTrainingFrames)
             fracDet = k/this.numberOfTrainingFrames;
@@ -170,24 +170,24 @@ function [this] = process(this)
             close(fDect);
             this.logStatus('Training done');
             this.logStatus('Tracking started');
-            
+
             % step counter
             this.step.counter = 1;
         end
-        
+
         % global time
         this.step.time = this.step.counter/this.video.actualFrameRate;
-        
+
         % check that there are particle to tirnagulate
         if(isempty(this.step.leftParticles) || isempty(this.step.rightParticles))
             this.logStatus(sprintf('[!!] Step #%d - No particles found in one of the frames', ...
                 this.step.counter));
             continue;
         end
-   
+
         % Simulate particle location
         this = this.predictNewParticleLocations();
-  
+
         % Assign tracks to measurements
         this = this.assignDetectionsToCurrentTracks();
 
@@ -220,7 +220,7 @@ function [this] = process(this)
 
         % Upate system for exporting
         this = this.updateSystem();
-         
+
         % Export and clean up lost tracks
         this = this.autoSave();
 

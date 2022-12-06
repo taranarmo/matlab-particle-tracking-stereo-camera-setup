@@ -133,7 +133,7 @@ function [this] = initSystem(this)
     this.logStatus(sprintf('Loading stereo calibration parameters ''%s''', ...
         this.stereoCalibrationFile));
     tmp = load(this.stereoCalibrationFile);
-    this.stereoParams = tmp.stereoParams;
+    this.stereoParams = tmp.calibrationData.stereoParams;
     if(~isa(this.stereoParams, 'stereoParameters'))
         error('Calibration file %s must be a ''stereoParameters'' object', ...
             this.stereoCalibrationFile);
