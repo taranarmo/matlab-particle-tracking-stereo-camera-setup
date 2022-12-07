@@ -95,7 +95,7 @@ The output is stored in `obj.lag`.
     'frameStep', 50);
 
     % Plot
-    figure; 
+    figure;
     subplot(211); hold on;
     plot(obj.lag.time, obj.lag.L, 'k--');
     plot(obj.lag.time, obj.lag.L_tilde, 'b-');

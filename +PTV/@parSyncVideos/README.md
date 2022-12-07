@@ -1,6 +1,6 @@
 # Introduction
 
-This MATLAB package extracts the lag data between two non-synchronised video 
+This MATLAB package extracts the lag data between two non-synchronised video
 streams. Type
 
     help PTV.parSyncVideos
@@ -71,7 +71,7 @@ Once the audio tracks have been read, the program plots the first chunk of synch
 
 ![alt text](./audio_signals.png)
 
-It then proceeds estimating the audio delay for the frames. The program shows a progress bar with the total number of samples/frames that have been processed. 
+It then proceeds estimating the audio delay for the frames. The program shows a progress bar with the total number of samples/frames that have been processed.
 
 The synchornised frame data are stored in `obj.lag`.
 
@@ -88,7 +88,7 @@ The synchornised frame data are stored in `obj.lag`.
     videoSetRightCamera = '/Volumes/stereo_cameras/lake/deployment_1/right/';
     mexopencvPath  = '/Users/yourUser/Documents/MATLAB/mexopencv-d29007b';
 
-    obj = PTV.parSyncVideos(videoSetLeftCamera, videoSetRightCamera, mexopencvPath, ...     
+    obj = PTV.parSyncVideos(videoSetLeftCamera, videoSetRightCamera, mexopencvPath, ...
       'frameStep', 50, 'workers', 3);
 
     % Plot

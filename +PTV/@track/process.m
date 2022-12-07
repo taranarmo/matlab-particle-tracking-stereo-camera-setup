@@ -159,7 +159,7 @@ function [this] = process(this)
             height(this.step.rightParticles), this.blobDetectionSettings.maximumCount));
         drawnow;
 
-        % train the foreground detection algorithm and skip these frames
+        %% train the foreground detection algorithm and skip these frames
         if(k <= this.numberOfTrainingFrames)
             fracDet = k/this.numberOfTrainingFrames;
             waitbar(fracDet, fDect, sprintf('Skipping frames %d/%d for training (%d%%)', ...

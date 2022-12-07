@@ -1,6 +1,6 @@
 # Introduction
 
-This MATLAB package estimates the calibration parameters of a 
+This MATLAB package estimates the calibration parameters of a
 stereo camera system that records asynchronised video streams. Type
 
     help PTV.calibration
@@ -36,8 +36,8 @@ anytime in the MATLAB Command Window to recall the following documentation.
 - **saveSummary** -  Save plots with calibration results. Default: true
 - **checkFrameNumber** -   Frame number to use to verify the calibration (i.e to compute the disparity and reconstruct the 3D scene). You can also verify the calibration using a frame pair not belonging to the calibration set by calling the `check` method. Default: first frame included in the calibration set. The set includes frames with detected chequerboard corners and includes frames that have not been exluded with the `Exclude` setting.
 - **disparityBlockSize** -  Width of each square block whose pixels are used for comparison between the images.  Default: 15. Max: 255. Min: 5.
-- **disparityMax** -  Maximum value of disparity. Run the calibration at least once to measure the maximum distance using the imtool from the stereo anaglyph. Default: 64. 
-- **disparityContrastThreshold** - Acceptable range of contrast values. Increasing this parameter results in fewer pixels being marked as unreliable. Default: 0.5. Max: 1. Min: 0. 
+- **disparityMax** -  Maximum value of disparity. Run the calibration at least once to measure the maximum distance using the imtool from the stereo anaglyph. Default: 64.
+- **disparityContrastThreshold** - Acceptable range of contrast values. Increasing this parameter results in fewer pixels being marked as unreliable. Default: 0.5. Max: 1. Min: 0.
 - **disparityUniquenessThreshold** -  Minimum value of uniqueness. Increasing this parameter results in the function   marking more pixels unreliable. When the  uniqueness value for a pixel is low, the  disparity computed for it is less reliable. Default: 15.
 
 
@@ -58,7 +58,7 @@ anytime in the MATLAB Command Window to recall the following documentation.
 - **boardSize** - Number of rows and columns in chequerboard. See `detectchequerboardPoints`
 - **imagesUsed** - Frames where the pattern was detected. See `detectchequerboardPoints`
 - **imageSize**- Size of the frame in pixels
-- **totalFrames** - Total number of valid and non-excluded frames used in the calibration set. 
+- **totalFrames** - Total number of valid and non-excluded frames used in the calibration set.
 
 ## Calibration output
 - **stereoParams** - Calibration parameters. See `stereoParameters`

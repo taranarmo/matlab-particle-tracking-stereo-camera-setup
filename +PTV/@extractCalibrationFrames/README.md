@@ -15,7 +15,7 @@ anytime in the MATLAB Command Window to recall the following documentation.
     leftVideo = '/path/to/video/from/left/camera';
     rightVideo = '/path/to/video/from/right/camera';
     mexopencvPath = '/path/to/opencv/mex/files';
-    % path to exported file from PTV.syncVideos 
+    % path to exported file from PTV.syncVideos
     lagParamsFile = '/path/to/delay/data';
     % timestamp in seconds of the frames to extract from the left camera
     timestamps = [1.22 3.322 5.32];
@@ -64,7 +64,7 @@ The algorithm exports the specified frames from the left camera and the synced o
 
         % Interpolate the lag linearly
         data = obj.interp();
-        
+
         % save sync data so that they can be used again
         data.save(lagParamsFile);
     end

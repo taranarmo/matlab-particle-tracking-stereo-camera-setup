@@ -18,13 +18,13 @@ anytime in the MATLAB Command Window to recall the following documentation.
 ```
 
 `PTV.track()` requires the following parameters:
-  1)  **calibrationFile**: path to calibration file. This must be a `stereoParameters` object either 
+  1)  **calibrationFile**: path to calibration file. This must be a `stereoParameters` object either
       generated from `PTV.calibrate` package
   2) **leftCameraPath**: path to videos shot from the left camera
   3) **rightCameraPath**: path to videos shot from the right camera
-  4) **videoLagFile**: path to lag data generated from the `syncVideos.save()` or `parSyncVideos.save()` methods in the PTV package 
+  4) **videoLagFile**: path to lag data generated from the `syncVideos.save()` or `parSyncVideos.save()` methods in the PTV package
   5) **mexopencvPathv**: path to mexopencv files
-  6) **blobDetectionSettings**: Struct array with options for the blob detection. See `vision.BlobAnalysis` for the option explanation. Example: 
+  6) **blobDetectionSettings**: Struct array with options for the blob detection. See `vision.BlobAnalysis` for the option explanation. Example:
 
         ```matlab
             blobDetectionSettings = struct('minimumBackgroundRatio', 0.4, 'minimumBlobArea', 10, ...
@@ -33,7 +33,7 @@ anytime in the MATLAB Command Window to recall the following documentation.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `minimumBlobArea` is too large, small particles close to the cameras or large and far-away particles may not be detected. If `minimumBlobArea` is instead too small, you might track background variations that are not particles, but small variations in ligth intensity in the background. If `maximumCount` is too small, some particles may not be tracked in some areas of the image. Make sure to detect as many particle as possible. Change these values based on the number of particles expected in the system.
 
-7) **trackDetectionSettings**: struct array with options for track detection settings. Example: 
+7) **trackDetectionSettings**: struct array with options for track detection settings. Example:
 
     ```matlab
         trackDetectionSettings = struct('visibilityRatio', 0.6, 'ageThreshold', 8, ...
@@ -44,14 +44,14 @@ anytime in the MATLAB Command Window to recall the following documentation.
 
  * the track age (defined as number of frames since the track was first detected) is between than `ageMin` and `ageMax` and their visibility (defined as the fraction of the track's age for which it was  visible) is less than `visibilityRatio`. This criterion identifies young tracks that have been invisible for too many frames. `ageMin` ensures not to remove tracks immediately. For example if age = 2 and the track was invisible for 1 frame, visibility would .5 and the track would be removed if visibilityRatio = 0.6.  In the example the number of non consecutive frames for which  the track was invisible is 0.6*8 ~ 5 frames.
 
-  * the number of consecutive frames when the track was invisible is greater or equal to `invisibleForTooLong`. This helps to identify particles that left the system and whose track is not traceable anymore. 
-        
-8) **kalmanSettings**: struct array with options for the Kalman algorithm settings. See `configureKalmanFilter` for the option explanation. Example: 
+  * the number of consecutive frames when the track was invisible is greater or equal to `invisibleForTooLong`. This helps to identify particles that left the system and whose track is not traceable anymore.
 
-    ```matlab 
+8) **kalmanSettings**: struct array with options for the Kalman algorithm settings. See `configureKalmanFilter` for the option explanation. Example:
+
+    ```matlab
         kalmanSettings = struct('costOfNonAssignment', 20, 'motionModel',  ...
             'ConstantVelocity', 'initialEstimateError', [200 50], ...
-            'motionNoise', [30 25], 'measurementNoise', 20);              
+            'motionNoise', [30 25], 'measurementNoise', 20);
     ```
 
      The `costOfNonAssignment` value should be tuned experimentally. A
@@ -128,7 +128,7 @@ anytime in the MATLAB Command Window to recall the following documentation.
 
 In the `logs` subfolder the following files are also created:
 
-- **info_*.log**: the log file contains info or warning messages during each step of the tracking. 
+- **info_*.log**: the log file contains info or warning messages during each step of the tracking.
 - **settings_*.yml**: this file contains all the parameters used in the tracking process.
 
 
@@ -183,7 +183,7 @@ In the `logs` subfolder the following files are also created:
         'MOV');
 
     % Content of deblur.m
-    function [leftFrameRect, rightFrameRect] = deBlur(leftFrameRect, rightFrameRect)    
+    function [leftFrameRect, rightFrameRect] = deBlur(leftFrameRect, rightFrameRect)
         leftFrameRect = imsharpen(leftFrameRect, 'Radius', 10, 'Threshold', 0.1);
         rightFrameRect = imsharpen(rightFrameRect, 'Radius', 10, 'Threshold', 0.1);
     end
