@@ -9,7 +9,7 @@ function [] = createTrackFile(fileName)
         'x\t y\t Disparity\t Area\t Major ax\t Minor ax\t', ...
         'Orientation\t Eccentricity\t r2\t Perimeter\t BB Width\t BB Height\t', ...
         'X\t Y\t Z\t Length H\t Length V\n'];
-    
+
     fprintf(fid, fileHeader);
     fclose(fid);
 end

@@ -13,7 +13,7 @@ function h = plotCameraModel(this)
 
         %% A=[fx 0 cx; 0 fy cy; 0 0 1] is the camera matrix or the matrix of
         % intrinsic parameters, where cx and cy represents the?principal point
-        % (centres of coordinates on the projection screen) and fx and fy the 
+        % (centres of coordinates on the projection screen) and fx and fy the
         % focal lengths.
         A = [cal.FocalLength(1) 0 cal.PrincipalPoint(1); ...
             0 cal.FocalLength(2) cal.PrincipalPoint(2); ...
@@ -22,14 +22,14 @@ function h = plotCameraModel(this)
 
         %% distortion coefficients matrix
         % D=[k1 k2 p1 p2 k3 k4 k5 k6 s1 s2 s3 s4 taux tauy] where k is the
-        % coefficient for radial distortion, p for tangential distortion and 
+        % coefficient for radial distortion, p for tangential distortion and
         % s the thin prism distortion coefficients (not estimated by MATLAB).
         % The coefficients k3 to k6 come from the rational model not used in
         % MATLAB or by default by openCV (set them to 0). tau is the
         % coefficient for the tilted sensor model (not used in MATLAB).
         D = [cal.RadialDistortion(1:2) cal.TangentialDistortion ...
             cal.RadialDistortion(3)  0 0 0 0 0 0 0 0 0];
-  
+
         nstep = 15;
         imageSize = cal.ImageSize(2:-1:1);
         [u, v] = meshgrid(linspace(0, imageSize(1)-1, nstep), ...
@@ -58,7 +58,7 @@ function h = plotCameraModel(this)
         axis ij equal tight
         title(sprintf('Camera %d', d));
     end
-    
+
     %% Plot translation and angles
     T = this.stereoParams.TranslationOfCamera2;
     [roll, pitch, yaw] = PTV.rotationMatToDeg(this.stereoParams.RotationOfCamera2);
@@ -80,6 +80,6 @@ function h = plotCameraModel(this)
     set(gca, 'XTick', 1:3);
     legend('X', 'Y', 'Z');
     box on;
-    
+
 end
 

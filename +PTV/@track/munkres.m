@@ -1,5 +1,5 @@
 function [assignment,cost] = munkres(costMat)
-% MUNKRES   Munkres (Hungarian) Algorithm for Linear Assignment Problem. 
+% MUNKRES   Munkres (Hungarian) Algorithm for Linear Assignment Problem.
 %
 % [ASSIGN,COST] = munkres(COSTMAT) returns the optimal column indices,
 % ASSIGN assigned to each row and the minimum COST based on the assignment
@@ -28,7 +28,7 @@ n=400;
 A=rand(n);
 tic
 [a,b]=munkres(A);
-toc                 % about 2 seconds 
+toc                 % about 2 seconds
 %}
 % Example 3: rectangular assignment with inf costs
 %{
@@ -38,29 +38,29 @@ A(A>0.7)=Inf;
 %}
 % Example 4: an example of partial assignment
 %{
-A = [1 3 Inf; Inf Inf 5; Inf Inf 0.5]; 
+A = [1 3 Inf; Inf Inf 5; Inf Inf 0.5];
 [a,b]=munkres(A)
 %}
 % a = [1 0 3]
 % b = 1.5
 % Reference:
-% "Munkres' Assignment Algorithm, Modified for Rectangular Matrices", 
+% "Munkres' Assignment Algorithm, Modified for Rectangular Matrices",
 % http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html
 
 % version 2.3 by Yi Cao at Cranfield University on 11th September 2011
 % Copyright (c) 2009, Yi Cao
 % All rights reserved.
-% 
+%
 % Redistribution and use in source and binary forms, with or without
 % modification, are permitted provided that the following conditions are
 % met:
-% 
+%
 %     * Redistributions of source code must retain the above copyright
 %       notice, this list of conditions and the following disclaimer.
 %     * Redistributions in binary form must reproduce the above copyright
 %       notice, this list of conditions and the following disclaimer in
 %       the documentation and/or other materials provided with the distribution
-% 
+%
 % THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 % AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 % IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -107,7 +107,7 @@ dMat(1:nRows,1:nCols) = costMat(validRow,validCol);
 minR = min(dMat,[],2);
 minC = min(bsxfun(@minus, dMat, minR));
 
-%**************************************************************************  
+%**************************************************************************
 %   STEP 2: Find a zero of dMat. If there are no starred zeros in its
 %           column or row start the zero. Repeat for each zero
 %**************************************************************************
@@ -137,10 +137,10 @@ while 1
     while 1
         %**************************************************************************
         %   STEP 4: Find a noncovered zero and prime it.  If there is no starred
-        %           zero in the row containing this primed zero, Go to Step 5.  
-        %           Otherwise, cover this row and uncover the column containing 
-        %           the starred zero. Continue in this manner until there are no 
-        %           uncovered zeros left. Save the smallest uncovered value and 
+        %           zero in the row containing this primed zero, Go to Step 5.
+        %           Otherwise, cover this row and uncover the column containing
+        %           the starred zero. Continue in this manner until there are no
+        %           uncovered zeros left. Save the smallest uncovered value and
         %           Go to Step 6.
         %**************************************************************************
         cR = find(~coverRow);
@@ -173,7 +173,7 @@ while 1
             %         row, and subtract it from every element of each uncovered column.
             %         Return to Step 4 without altering any stars, primes, or covered lines.
             %**************************************************************************
-            [minval,rIdx,cIdx]=outerplus(dMat(~coverRow,~coverColumn),minR(~coverRow),minC(~coverColumn));            
+            [minval,rIdx,cIdx]=outerplus(dMat(~coverRow,~coverColumn),minR(~coverRow),minC(~coverColumn));
             minC(~coverColumn) = minC(~coverColumn) + minval;
             minR(coverRow) = minR(coverRow) - minval;
         else

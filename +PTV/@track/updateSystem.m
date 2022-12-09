@@ -9,9 +9,9 @@ function [this] = updateSystem(this)
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
 
     tic;
-     
+
     h = height(this.step.tracks);
-    
+
     % global indexes
     stepNumber = repmat(this.step.counter, h, 1);
     globalLeftFrame = repmat(this.step.globalLeftFrame, h, 1);
@@ -23,8 +23,8 @@ function [this] = updateSystem(this)
     leftFrameId = repmat(this.step.leftFrameId, h, 1);
     rightVideoNum = repmat(this.step.fileIndex.right, h, 1);
     rightFrameId = repmat(this.step.rightFrameId, h, 1);
-   
-    % track data             
+
+    % track data
     trackId = this.step.tracks.id;
     age = this.step.tracks.age;
     totalVisibleCount = this.step.tracks.totalVisibleCount;
@@ -32,7 +32,7 @@ function [this] = updateSystem(this)
     consecutiveInvisibleCount = this.step.tracks.consecutiveInvisibleCount;
     estimated = this.step.tracks.estimated;
     lost = this.step.tracks.lost;
-   
+
     % particle data
     x = this.step.tracks.centroid(:, 1);
     y = this.step.tracks.centroid(:, 2);
@@ -46,7 +46,7 @@ function [this] = updateSystem(this)
     per = this.step.tracks.per;
     bboxWidth = double(this.step.tracks.bbox(:, 3));
     bboxHeight = double(this.step.tracks.bbox(:, 4));
-    
+
     % data in real world
     X = this.step.tracks.worldCoordinates(:, 1);
     Y = this.step.tracks.worldCoordinates(:, 2);
@@ -56,16 +56,16 @@ function [this] = updateSystem(this)
 
     % new field
     saved = zeros(h, 1);
-    
+
     newRow = table(stepNumber, globalLeftFrame, globalRightFrame, t,...
        leftVideoNum, leftFrameId , rightVideoNum, rightFrameId, ...
        trackId, age, totalVisibleCount, totalInvisibleCount, ...
        consecutiveInvisibleCount, estimated, lost, saved, ...
        x, y, disparity, area, ax_mj, ax_mn, or, ecc, r2, per, bboxWidth, bboxHeight, ...
        X, Y, Z, particleLengthH, particleLengthV);
- 
+
     this.system = [this.system; newRow];
-    
+
     this.logStatus(sprintf('Step #%d - Updating system took %.3f seconds', ...
         this.step.counter, toc), false);
 end

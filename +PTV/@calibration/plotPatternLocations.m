@@ -3,7 +3,7 @@ function h = plotPatternLocations(this)
 %respect to each camera.
 %AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
 
-    h = figure; 
+    h = figure;
     showExtrinsics(this.stereoParams, 'CameraCentric');
 end
 

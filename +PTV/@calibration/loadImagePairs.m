@@ -15,17 +15,17 @@ function this = loadImagePairs(this)
     for f=1:length(this.fileNames)
         this.imagesLeftAll{f} = fullfile(framesLeftCameraPath, this.fileNames(f).name);
     end
-    
+
     this.fileNamesAll = strrep({this.fileNames.name}, '.png', '');
-    
+
     %% Right frame. Split between synced frames and + / -
     framesRightCameraPath = fullfile(this.framesPath, 'frames_right_camera');
     fileNamesRight = dir([framesRightCameraPath '/f*.png']);
-    
+
     % natural sorting
-    [~, I] = PTV.sort_nat({fileNamesRight.name}); 
+    [~, I] = PTV.sort_nat({fileNamesRight.name});
     fileNamesRight = fileNamesRight(I);
-    
+
     % get file name without + or -
     matches = cellfun(@(i) regexp(i,'^f(\d{1,2})_(\d*).png'), {fileNamesRight.name}, 'UniformOutput', false);
     matches = ~cellfun('isempty', matches);
@@ -33,7 +33,7 @@ function this = loadImagePairs(this)
     for f=1:length(tmp)
         this.imagesRightAll{f} = fullfile(framesRightCameraPath, tmp(f).name);
     end
-    
+
     % get file name with +
     matches = cellfun(@(i) regexp(i,'^f(\d{1,2})_(\d*)(+).png'), {fileNamesRight.name}, 'UniformOutput', false);
     matches = ~cellfun('isempty', matches);
@@ -41,7 +41,7 @@ function this = loadImagePairs(this)
     for f=1:length(tmp)
         this.imagesRightAllPlus{f} = fullfile(framesRightCameraPath, tmp(f).name);
     end
-    
+
     % get file name with -
     matches = cellfun(@(i) regexp(i,'^f(\d{1,2})_(\d*)(-).png'), {fileNamesRight.name}, 'UniformOutput', false);
     matches = ~cellfun('isempty', matches);
@@ -49,7 +49,7 @@ function this = loadImagePairs(this)
     for f=1:length(tmp)
         this.imagesRightAllMinus{f} = fullfile(framesRightCameraPath, tmp(f).name);
     end
-    
+
     total = length(this.fileNames);
     if(length(this.imagesRightAll) ~= total || length(this.imagesRightAllPlus) ~= total || ...
             length(this.imagesRightAllMinus) ~= total)

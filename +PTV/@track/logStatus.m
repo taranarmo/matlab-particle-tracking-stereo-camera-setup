@@ -7,7 +7,7 @@ function logStatus(this, message, print)
 %    print       -  Wether to print the message in the command windo [bool]
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
     if(nargin == 2)
         print = true;
     end
@@ -20,7 +20,7 @@ function logStatus(this, message, print)
         fprintf(fid, '%s\n', content);
         fclose(fid);
     end
-    
+
     if(print)
         fprintf('>> %s\n', message);
     end

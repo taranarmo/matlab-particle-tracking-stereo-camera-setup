@@ -10,9 +10,9 @@ function [this] = updateUnassignedTracks(this)
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
 
     tic;
-    
+
     row = this.step.unassignedTracks;
-    
+
     this.step.tracks.age(row) = this.step.tracks.age(row) + 1;
 
     this.step.tracks.totalInvisibleCount(row) = ...
@@ -20,7 +20,7 @@ function [this] = updateUnassignedTracks(this)
 
     this.step.tracks.consecutiveInvisibleCount(row) = ...
         this.step.tracks.consecutiveInvisibleCount(row) + 1;
-    
+
     timeTaken = toc;
     this.logStatus(sprintf('Step #%d - Updating unassigned tracks took %.3f seconds', ...
         this.step.counter, timeTaken), false);

@@ -10,7 +10,7 @@ function [videoObject, videoProps] = readVideoFile(this, videoFile)
 %    videoProps.numFrames    -  Total number of frames            [double]
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
     % Path checks
     if(~exist(this.mexopencvPath, 'dir'))
         error('The provided path to mexopencv does not exist');
@@ -19,9 +19,9 @@ function [videoObject, videoProps] = readVideoFile(this, videoFile)
     if(~exist(videoFile, 'file'))
         error('The provided video file does not exist');
     end
-    
+
     addpath(this.mexopencvPath);
-    
+
     % read video with open CV
     videoObject = cv.VideoCapture(videoFile);
     videoProps.numFrames = videoObject.FrameCount;

@@ -14,16 +14,16 @@ classdef syncVideos
 %
 %  PTV.syncVideos() requires the following parameters:
 %
-%   1) Path to a video  or a folder containing all videos recorded from 
+%   1) Path to a video  or a folder containing all videos recorded from
 %      left camera
-%   2) Path to a video  or a folder containing all videos recorded from 
+%   2) Path to a video  or a folder containing all videos recorded from
 %      right camera
 %   3) Path to mexopencv library.
 %
 %  obj = PTV.syncVideos(..., Name, Value) specifies additional
 %    name-value pairs described below:
 %
-%   'videoFileExtension'    Extension of the video files 
+%   'videoFileExtension'    Extension of the video files
 %
 %                           Default: 'MP4'
 %
@@ -40,9 +40,9 @@ classdef syncVideos
 %                           set this larger than 48000*60.
 %
 %                           Default: 48000*60
-%   
 %
-%   obj = PTV.syncVideos(...) returns a track object containing the following 
+%
+%   obj = PTV.syncVideos(...) returns a track object containing the following
 %   public properties:
 %
 %      videoSetLeftCamera    - Complete path to the folder containing the set
@@ -51,9 +51,9 @@ classdef syncVideos
 %                              of video files or path to a video
 %      frameRate      - The video frame rate
 %      totalVideos    - The total processed videos
-%      framesSetLeft         - The number of frames in each video files from 
+%      framesSetLeft         - The number of frames in each video files from
 %                              the left camera
-%      framesSetRight        - The number of frames in each video files from 
+%      framesSetRight        - The number of frames in each video files from
 %                              the right camera
 %      totalFramesLeftCamera      - The total frames from the left camera
 %      totalFramesRightCamera     - The total frames from the right camera
@@ -80,12 +80,12 @@ classdef syncVideos
 %   obj = PTV.syncVideos(...) provides the following public methods:
 %
 %      toStruct       - Convert class properties to a structure variable
-%      interp         - In case 'frameStep' is not set to 1, interpolate 
+%      interp         - In case 'frameStep' is not set to 1, interpolate
 %                       linearly the 'lag' table data so that the frame
 %                       step for F1 is 1. Setting 'frameStep' to 1 may take
 %                       a long time to sync the videos. The method updates
 %                       this.lag with the new interpolated table.
-%      save           - Save the lag data to a MAT file to be used in the 
+%      save           - Save the lag data to a MAT file to be used in the
 %                       track algorithm. Specify the output file name as input
 %                       of the method.
 %
@@ -95,117 +95,117 @@ classdef syncVideos
     properties (GetAccess = public, SetAccess = private)
         % complete path to the folder containing the 1st set of video files
         videoSet1
-        
+
         % complete path to the folder containing the 2nd set of video files
         videoSet2
-        
+
         % video frame rate
         frameRate
-        
+
         % total processed videos
         totalVideos
-        
+
         % frames in each video files from 1st set
         framesSet1
-        
+
         % frames in each video files from 2nd set
         framesSet2
-        
+
         % total frames in 1st set
         totalFramesCamera1
-        
+
         % total frames in 2nd set
         totalFramesCamera2
-        
+
         % frame step to use in assessing the lag
         frameStep
-        
+
         % number of audio samples to consider in the lag evaluation
         audioWindowSize
-        
+
         % lag output table
         lag
-        
+
         % message about lag
         lagMessage
-        
+
         % first synced frame of right video with left video
         startRightVideo
-        
+
         % first synced frame of left video with right video
         startLeftVideo
     end
-    
+
     properties (GetAccess = private, SetAccess = public)
         % path to the MEX files of openCV
         mexopencvPath
-        
+
         % Extension of the video files
         videoFileExtension
     end
-    
+
     properties (Access = private)
         % vide files in 1st set
         fileList1
-        
+
         % vide files in 2nd set
         fileList2
-        
+
         % total number of frames to process
         totalSamples
-        
+
         % vector of frames to process
         frames
-        
+
         % time vector
         time
-        
+
         % total audio samples to process
         totalAudioSamples
-        
+
         % time vector for audio
         audioTime
-        
+
         % full audio tracks from 1st set
         audio1
-        
+
         % full audio tracks from 2nd set
         audio2
-        
+
         % subsample of full audio tracks from 1st set
         audio1Sample
-        
+
         % subsample of full audio tracks from 2nd set
         audio2Sample
-        
+
         % shifted subsample of full audio tracks from 1st set
         audio1SampleShifted
-        
+
         % shifted subsample of full audio tracks from 2nd set
-        audio2SampleShifted        
-        
+        audio2SampleShifted
+
         % audio frame rate
         audioSamplingFrequency
-        
+
         % constant lag assumed during tracking
         constantVideoLag
-        
+
         % table header in this.lag
         lagHeader
-        
+
         % for interpolation (syncVideos.interp()) save original table
         lagRaw
     end
-    
+
     methods
         %==================================================================
         % Constructor
         %==================================================================
         % obj = syncVideos();
-        function this = syncVideos(varargin)            
+        function this = syncVideos(varargin)
             [this.videoSet1, this.videoSet2, this.mexopencvPath, ...
                 this.videoFileExtension, this.frameStep, this.audioWindowSize] = ...
-                    validateAndParseInputs(varargin{:}); 
+                    validateAndParseInputs(varargin{:});
 
             this.lagHeader = {'time', 'F1', 'F2', 'audioStart', 'audioEnd', ...
                 'D', 'L', 'L_tilde', 'tau'};
@@ -214,11 +214,11 @@ classdef syncVideos
             if(contains(this.videoSet1, this.videoFileExtension))
                 this.fileList1{1}.fullFile = this.videoSet1;
                 this.fileList2{1}.fullFile = this.videoSet2;
-                
+
                 [fPath, fName] = fileparts(this.videoSet1);
                 this.fileList1{1}.fileName = sprintf('%s.%s', fName, this.videoFileExtension);
                 this.videoSet1 = fPath;
-                
+
                 [fPath, fName] = fileparts(this.videoSet2);
                 this.fileList2{1}.fileName = sprintf('%s.%s', fName, this.videoFileExtension);
                 this.videoSet2 = fPath;
@@ -230,10 +230,10 @@ classdef syncVideos
             if(isempty(this.fileList1) || isempty(this.fileList2))
                 error('Cannot file files in ''videoSet1'' or ''videoSet2''');
             end
-            
+
             %% Collect total video frames
             this.totalVideos = length(this.fileList1);
-      
+
             this.framesSet1 = NaN(1, this.totalVideos);
             this.framesSet2 = this.framesSet1;
             for v=1:this.totalVideos
@@ -273,7 +273,7 @@ classdef syncVideos
 
                     this.audio1 = [this.audio1; audioTmp1(:, audioChannel)];
                     this.audio2 = [this.audio2; audioTmp2(:, audioChannel)];
-                    timeTaken = toc; 
+                    timeTaken = toc;
                 end
                 % Export files
                 audioTrack1 = this.audio1;
@@ -287,11 +287,11 @@ classdef syncVideos
                 tmp = load(a1);
                 this.audio1 = tmp.audioTrack1;
                 Fs = tmp.Fs;
-                
+
                 tmp = load(a2);
                 this.audio2 = tmp.audioTrack2;
             end
-            
+
             this.totalAudioSamples = min([length(this.audio1) length(this.audio2)]);
             this.audioSamplingFrequency = Fs;
 
@@ -300,7 +300,7 @@ classdef syncVideos
             k = 1;
             w = waitbar(0, 'Please wait...');
             timeTaken = 0;
-            
+
             for FPrime=1:this.frameStep:this.totalSamples
                 tic;
                 leftTime = (this.totalSamples/this.frameStep-FPrime)*timeTaken;
@@ -313,7 +313,7 @@ classdef syncVideos
                 APrime = floor(FPrime/this.frameRate*this.audioSamplingFrequency);
                 iStart = APrime;
                 iEnd = APrime - 1 + this.audioWindowSize;
-                
+
                 if(iEnd > this.totalAudioSamples)
                     % continue if the for the last sample the size is at
                     % least half the audioSamplingFrequency length
@@ -323,31 +323,31 @@ classdef syncVideos
                         break;
                     end
                 end
-                
+
                 %% Get delay
                 this.audio1Sample = this.audio1(iStart:iEnd);
                 this.audio2Sample = this.audio2(iStart:iEnd);
                 [this.audio2SampleShifted, this.audio1SampleShifted, D] = ...
-                        alignsignals(this.audio2Sample, this.audio1Sample); 
-                    
+                        alignsignals(this.audio2Sample, this.audio1Sample);
+
                 %% Export
                 this.lag(k).time = FPrime/this.frameRate;
 
                 % delay in audio frames
-                this.lag(k).D = D; 
+                this.lag(k).D = D;
                 % delay in the video frames
                 this.lag(k).L = D/this.audioSamplingFrequency*this.frameRate;
-                
+
                 % with GoPros L_tilde is always constant. With Olympus
-                % Tough cameras, this may not be the case, due to the time 
-                % jump created by the camera reaches when the 4GB limit 
+                % Tough cameras, this may not be the case, due to the time
+                % jump created by the camera reaches when the 4GB limit
                 % on the video file is reached; when the new file is
                 % created, Tough cameras introduce a larger lag than
                 % the GoPros and L_tilde is not constant. To avoid error in
                 % the tracking it is important to use the rounded L.
                 this.lag(k).L_tilde = round(this.lag(k).L);
                 this.lag(k).tau = this.lag(k).L_tilde - this.lag(k).L;
-                
+
                 if(D > 0)
                     % Left video is advanced
                     % FPrime = 1; L_tilde(1) = 47; F1(1) = L_tilde + FPrime - 1 = 47 + 1 -1 = 47;
@@ -356,15 +356,15 @@ classdef syncVideos
                     this.lag(k).F2 = this.lag(k).F1 - this.lag(k).L_tilde + 1;
                 else
                     % Left video is delayed
-                    % FPrime = 1; L_tilde(1) = -47; F1(1) = FPrime = 1; 
+                    % FPrime = 1; L_tilde(1) = -47; F1(1) = FPrime = 1;
                     % F2 (1) = F1(1) - L_tilde(1) - 1 = 1 + 47 - 1 = 47;
                     this.lag(k).F1 = FPrime;
                     this.lag(k).F2 = this.lag(k).F1 - this.lag(k).L_tilde - 1;
                 end
-                
+
                 this.lag(k).audioStart = iStart;
                 this.lag(k).audioEnd = iEnd;
-                                
+
                 if(k == 1)
                     if(D > 0)
                         this.lagMessage = sprintf('Left video is advanced of %.3f secs (%d frames). Cut it at %.3f secs.', ...
@@ -389,11 +389,11 @@ classdef syncVideos
                     end
                     D = strsplit(this.lagMessage, ' Cut');
                     fprintf('>> %s\n', D{1});
-                    
+
                     % Plot aligned signals from 1:this.audioWindowSize
                     this.plotAudioSummary();
                 end
-                
+
                 timeTaken = nanmean([timeTaken toc]);
                 k = k + 1;
             end
@@ -402,7 +402,7 @@ classdef syncVideos
             this.lag = struct2table(this.lag);
             this.lag = this.lag(:, this.lagHeader);
         end
-        
+
         % Convert class properties to a structure variable.
         function s = toStruct(this)
             str = fieldnames(this);
@@ -411,7 +411,7 @@ classdef syncVideos
                 s.(name) = this.(name);
             end
         end
-        
+
         function this = interp(this)
             % linear interpolation
             vector = this.lag.F1(1):this.lag.F1(end);
@@ -430,21 +430,21 @@ classdef syncVideos
                 'VariableNames', this.lagHeader([1:3 6:end]) ...
             );
         end
-        
+
         function save(this, file)
             out = this.toStruct();
             save(file, '-struct', 'out');
         end
     end
-     
+
     methods(Access = private)
        [] = plotAudioSummary(this);
     end
-    
+
     methods(Static)
        fileList = loadFiles(pathToScan, videoExt);
     end
-    
+
 end
 
 %% Parameter validation
@@ -452,28 +452,28 @@ function [videoSet1, videoSet2, mexopencvPath, videoFileExtension, ...
     frameStep, audioWindowSize] = validateAndParseInputs(varargin)
     % Validate and parse inputs
     narginchk(1, 9);
-    
+
     parser = inputParser;
-    parser.CaseSensitive = false;    
+    parser.CaseSensitive = false;
 
     parser.addRequired('videoSet1', @(x)validateattributes(x, {'char'}, {'nonempty'}));
     parser.addRequired('videoSet2', @(x)validateattributes(x, {'char'}, {'nonempty'}));
     parser.addRequired('mexopencvPath', @(x)validateattributes(x, {'char'}, {'nonempty'}));
-    
+
     parser.addParameter('videoFileExtension', 'MP4', @(x)validateattributes(x, {'char'}, {}));
     parser.addParameter('frameStep', 100, @(x)validateattributes(x, {'numeric'}, ...
         {'real', 'scalar', 'integer', 'nonnegative', 'nonzero', '>=', 1}));
     parser.addParameter('audioWindowSize', 48000*60, @(x)validateattributes(x, {'numeric'}, ...
         {'real', 'scalar', 'integer', 'nonnegative', 'nonzero', '>=', 1}));
-    
+
     parser.parse(varargin{:});
 
     videoSet1 = parser.Results.videoSet1;
     videoSet2 = parser.Results.videoSet2;
     mexopencvPath = parser.Results.mexopencvPath;
-    
+
     videoFileExtension = parser.Results.videoFileExtension;
-    frameStep = parser.Results.frameStep; 
+    frameStep = parser.Results.frameStep;
     audioWindowSize = parser.Results.audioWindowSize;
 end
 

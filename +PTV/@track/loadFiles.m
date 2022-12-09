@@ -10,12 +10,12 @@ function fileList = loadFiles(pathToScan, videoExt)
 %    fileList    -  List of files                                 [struct]
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
    list = dir(sprintf('%s/*.%s', pathToScan, videoExt));
-   
+
    I = ismember({list.name}, {'.', '..'});
    list(I) = [];
-   
+
    j = 1;
    fileList = [];
    for f=1:length(list)
@@ -26,7 +26,7 @@ function fileList = loadFiles(pathToScan, videoExt)
       fileList{j}.fileName = list(f).name;
       j = j + 1;
    end
-   
+
    if(isempty(fileList))
        error('Cannot find files in %s', pathToScan);
    end

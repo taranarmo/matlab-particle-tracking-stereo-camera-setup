@@ -10,12 +10,12 @@ function fileList = loadFiles(pathToScan, videoExt)
 %    fileList    -  List of files                                 [struct]
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
    list = dir(sprintf('%s/*.%s', pathToScan, videoExt));
-   
+
    I = ismember({list.name}, {'.', '..'});
    list(I) = [];
-   
+
    j = 1;
    for f=1:length(list)
       if(strcmp(list(f).name(1), '.'))

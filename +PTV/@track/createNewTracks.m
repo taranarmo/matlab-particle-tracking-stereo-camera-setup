@@ -2,15 +2,15 @@ function [this] = createNewTracks(this)
 %CREATENEWTRACKS Creates new tracks from unassigned detections in the
 % step.tracks object.
 % This function is also used to initialise particles found in the 1st frame
-% with the Kalman filter when this.step.tracks is empty. 
+% with the Kalman filter when this.step.tracks is empty.
 % Available track data are:
-%    
+%
 %   TRACK DATA
 %   - id: track ID
 %   - kalmanFilter: Kalman filter object
 %   - age: number of frames since the track was first detected
 %   - totalVisibleCount:  number of frames when the track was ivisible
-%   - consecutiveInvisibleCount: number of consecutive frames when the track 
+%   - consecutiveInvisibleCount: number of consecutive frames when the track
 %       was inivisible
 %   - estimated: whether the centroid and bbox were estimated. This happens
 %      when the track is not assinged to any detection in the left frame.
@@ -22,7 +22,7 @@ function [this] = createNewTracks(this)
 %   - bbox: particle boundary box
 %   - length: particle length
 %   - disparity: particle disparity
-%   - worldCoordinates: 3x1 matrix with particle in world coordinate unit. 
+%   - worldCoordinates: 3x1 matrix with particle in world coordinate unit.
 %     The unit is that used in the calibration chequerboard (see stereoParamters)
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
@@ -32,7 +32,7 @@ function [this] = createNewTracks(this)
     bboxes = this.step.leftParticles.bbox(this.step.unassignedDetections, :);
     areas = this.step.leftParticles.area(this.step.unassignedDetections);
     ids = this.step.leftParticles.id(this.step.unassignedDetections);
-    
+
     ax_mjs = this.step.leftParticles.ax_mj(this.step.unassignedDetections);
     ax_mns = this.step.leftParticles.ax_mn(this.step.unassignedDetections);
     ors = this.step.leftParticles.or(this.step.unassignedDetections);
@@ -46,7 +46,7 @@ function [this] = createNewTracks(this)
         if(height(this.step.tracks) >= this.maxTracks)
             continue;
         end
-        
+
         centroid = centroids(i, :);
         bbox = bboxes(i, :);
         area = double(areas(i, :));
@@ -79,8 +79,8 @@ function [this] = createNewTracks(this)
 
     omitted = length(this.step.unassignedDetections) - newTrackCount;
     this.logStatus(sprintf('Step #%d - Created %d new tracks. Skipped %d', ...
-       this.step.counter, newTrackCount, omitted), false);  
-   
+       this.step.counter, newTrackCount, omitted), false);
+
     this.logStatus(sprintf('Step #%d - Creating new tracks took %.3f seconds', ...
         this.step.counter, toc), false);
 end

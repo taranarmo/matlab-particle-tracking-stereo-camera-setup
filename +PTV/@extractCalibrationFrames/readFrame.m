@@ -1,7 +1,7 @@
 function [frame, isFrameValid] = readFrame(video, frameNumber)
 %READFRAME Reads a video frame using openCV based on its index.
 %
-%  USAGE:  
+%  USAGE:
 %   frame = readFrame(video, frameNumber)
 %
 %  INPUT:
@@ -17,7 +17,7 @@ function [frame, isFrameValid] = readFrame(video, frameNumber)
     if(~isa(video, 'cv.VideoCapture'))
         error('video must be a cv.VideoCapture object');
     end
-    
+
     isFrameValid = true;
 
     % use frameNumber-1 otherwise when the video is read, the frame advances to
@@ -27,11 +27,11 @@ function [frame, isFrameValid] = readFrame(video, frameNumber)
         frameNumber = frameNumber-1;
     end
     video.set('PosFrames', frameNumber);
-    
+
     frame = video.read();
-    if(isempty(frame))    
+    if(isempty(frame))
         isFrameValid = false;
-        warning('Frame %d is invalid', frameNumber);        
+        warning('Frame %d is invalid', frameNumber);
     end
 end
 

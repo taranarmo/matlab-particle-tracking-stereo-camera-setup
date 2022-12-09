@@ -8,11 +8,11 @@ function [] = plotAudioSummary(this)
     %% Figures
     figure;
     subplot(221);
-    plot(T, this.audio1Sample, 'k-'); 
+    plot(T, this.audio1Sample, 'k-');
     title 'Audio #1';
 
     subplot(223);
-    plot(T, this.audio2Sample, 'b-'); 
+    plot(T, this.audio2Sample, 'b-');
     title 'Audio #2';
     xlabel 'Time (secs)'
 
@@ -25,7 +25,7 @@ function [] = plotAudioSummary(this)
 
     subplot(224);
     T2 = 0:1/this.audioSamplingFrequency:(length(this.audio2SampleShifted)-1)/this.audioSamplingFrequency;
-    plot(T2, this.audio2SampleShifted, 'b-'); 
+    plot(T2, this.audio2SampleShifted, 'b-');
     title 'Aligned audio #2';
     xlabel 'Time (secs)'
     xlim(T([1 end]));

@@ -1,7 +1,7 @@
 function this = fixRightCoordinates(this)
 %FIXRIGHTCOORDINATES Fix coordinates from chequerboards detected from the
 %right camera to ensure video synchronisation.
-    
+
     fprintf('>> Fix coordinates from chequerboards detected from the right camera to ensure video synchronisation.\n');
 
     for fr=1:this.totalFrames
@@ -42,7 +42,7 @@ function this = fixRightCoordinates(this)
                     % slope
                     mik_x = this.imagePointsRight(:, c, fr) - this.imagePointsRightMinus(:, c, fr);
                     this.imagePointsRight(:, c, fr) = this.imagePointsRight(:, c, fr) + mik_x*tau;
-                end                
+                end
             end
         end
 % plot(squeeze(this.imagePointsRight(:, 1, fr)), squeeze(this.imagePointsRight(:, 2, fr)), 'ro')

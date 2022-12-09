@@ -1,6 +1,6 @@
 function [this] = assignDetectionsToCurrentTracks(this)
 %ASSIGNDETECTIONSTOTRACKS Assings the detected centroids to a track in the
-%current frame. 
+%current frame.
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
 
@@ -17,13 +17,13 @@ function [this] = assignDetectionsToCurrentTracks(this)
         cost(i, :) = distance(this.step.tracks.kalmanFilter{i}, ...
             this.step.leftParticles.centroid);
     end
-    
+
     % Filter out larger distances
     % Set distance=Inf when cost > costOfNonAssignment, so that those tracks
     % will never be assigned. When cost is Inf, the 'munkres' function removes
     % these data.
     cost(cost > this.kalmanSettings.costOfNonAssignment) = Inf;
-    
+
     % This is faster than MATLAB's implementation
     % 'assignDetectionsToTracks'
     idx = this.munkres(cost);
@@ -32,17 +32,17 @@ function [this] = assignDetectionsToCurrentTracks(this)
     this.step.assignments = [1:length(idx); idx]';
     I = this.step.assignments(:, 2) == 0;
     this.step.assignments(I, :) = [];
-    
-    % get indexes assignments(:, 1) when idx=0 for unassigned tracks 
+
+    % get indexes assignments(:, 1) when idx=0 for unassigned tracks
     this.step.unassignedTracks = find(idx == 0);
-    
+
     % unassigned detections
     this.step.unassignedDetections = setdiff(1:nDetections, ...
         this.step.assignments(:, 2));
-    
+
     this.logStatus(sprintf('Step #%d - Assignment took %.3f seconds', ...
         this.step.counter, toc), false);
-    
+
     this.logStatus(...
         sprintf('Step #%d - Assigned tracks: %d - unassigned tracks: %d - unassigned detections: %d', ...
         this.step.counter, length(this.step.assignments), ...

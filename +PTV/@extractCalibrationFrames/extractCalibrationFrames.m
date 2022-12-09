@@ -4,7 +4,7 @@ classdef extractCalibrationFrames
 %  leftVideo = '/path/to/video/from/left/camera';
 %  rightVideo = '/path/to/video/from/right/camera';
 %  mexopencvPath = '/path/to/opencv/mex/files';
-%  % path to exported file from PTV.syncVideos 
+%  % path to exported file from PTV.syncVideos
 %  lagParamsFile = '/path/to/delay/data';
 %  % timestamp in seconds of the frames to extract from the left camera
 %  timestamps = [1.22 3.322 5.32];
@@ -19,7 +19,7 @@ classdef extractCalibrationFrames
 %   1) Path to video recorded with left camera.
 %   2) Path to video recorded with right camera.
 %   3) Path to mexopencv library.
-%   4) Lag data about video from left and right camera obtained 
+%   4) Lag data about video from left and right camera obtained
 %       from PTV.syncVideos or PTV.parSyncVideo
 %   5) Timestamps in seconds of the frames from the left camera
 %       to be extracted from the videos
@@ -35,8 +35,8 @@ classdef extractCalibrationFrames
 %   'rotateRightVideo'      Whether to rotate the right video of 180deg.
 %
 %                           Default to false.
-% 
-% PTV.extractCalibrationFrames saves the frames into two sub-folders named 
+%
+% PTV.extractCalibrationFrames saves the frames into two sub-folders named
 % 'frames_left_camera' and 'frames_right_camera' in 'outPath'.
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
@@ -44,49 +44,49 @@ classdef extractCalibrationFrames
     properties (Access = public)
         % Path to video from left camera
         leftVideoFile
-        
+
         % Path to video from right camera
         rightVideoFile
-        
-        % Extracting frames at the provided timestamps. Use the 
+
+        % Extracting frames at the provided timestamps. Use the
         % timestamp from the left video.
         getImagesAt
-        
+
         % Path to MEX files for openCV
         mexopencvPath
-        
+
         % Path where to export frames
         outPath
 
         % Path to data from PTV.syncVideos or PTV.parSyncVideos
         lagParamsFile
-        
+
         % Whether to rotate the right video of 180deg
         rotateRightVideo
-        
+
         % Whether to rotate the left video of 180deg
         rotateLeftVideo
     end
-    
+
     properties (GetAccess = public, SetAccess = private)
         % Data from PTV.syncVideos
         lagData
     end
-    
+
     methods
-        function this = extractCalibrationFrames(varargin)            
+        function this = extractCalibrationFrames(varargin)
             [this.leftVideoFile, this.rightVideoFile, this.getImagesAt, ...
                this.lagParamsFile, this.mexopencvPath, this.outPath, ...
                this.rotateRightVideo, this.rotateLeftVideo] = ...
-                    validateAndParseInputs(varargin{:}); 
+                    validateAndParseInputs(varargin{:});
 
             if(~exist(this.lagParamsFile, 'file'))
                 error('File ''%s'' does not exist', this.lagParamsFile);
             end
-            
+
             this.lagData = load(this.lagParamsFile);
             fprintf('>> %s\n', this.lagData.lagMessage);
-            
+
             %% Read videos first
             fprintf('>> Reading videos\n');
             [leftVideoObj, leftVideoProps] = this.readVideoFile(this.leftVideoFile);
@@ -114,7 +114,7 @@ classdef extractCalibrationFrames
 
             %% Get frames
             fprintf('>> Total frames to extract %d\n', length(this.getImagesAt));
-            
+
             outPath1 = fullfile(this.outPath, 'frames_left_camera');
             outPath2 = fullfile(this.outPath, 'frames_right_camera');
             fprintf('>> Frames will be extracted in %s and %s\n', outPath1, outPath2);
@@ -142,7 +142,7 @@ classdef extractCalibrationFrames
                     waitbar(frac, f, sprintf('Extracting frame %d/%d at %.3f secs (%d%%) - Left: %.2f mins', ...
                          imageNumber, length(this.getImagesAt), t, ...
                          round(frac*100), timeLeft));
-                     
+
                     %% Left
                     t = this.getImagesAt(imageNumber);
                     frameNumber.left = this.getFrameNumberFromTimestamp(leftVideoProps, t);
@@ -156,11 +156,11 @@ classdef extractCalibrationFrames
                     end
                     frameFileName = sprintf('f%d_%d.png', imageNumber, frameNumber.left);
                     imwrite(leftFrame, fullfile(outPath1, frameFileName), 'png');
-                    
+
                     %% Right
                     frameNumber.right = this.getRightFrameIdx(frameNumber.left);
                     % check that the right frame index is associated with a
-                    % left frame in the sync data. 
+                    % left frame in the sync data.
                     if(isempty(frameNumber.right))
                         % delete left frame
                         delete(fullfile(outPath1, frameFileName));
@@ -185,11 +185,11 @@ classdef extractCalibrationFrames
                         frameFileNameX = sprintf('f%d_%.0f%s.png', imageNumber, frameRight(2), l{frx});
                         imwrite(rightFrame, fullfile(outPath2, frameFileNameX), 'png');
                     end
-                    
+
                     meanTime = nanmean([meanTime; toc]);
                     imageProcessed = imageProcessed + 1;
                 end
-                
+
                 fprintf('>> Extracted %d frames\n', imageProcessed);
                 fprintf('>> Skipped %d frames\n', totalImages - imageProcessed);
                 close(f);
@@ -198,12 +198,12 @@ classdef extractCalibrationFrames
             end
         end
     end
-    
+
     methods(Access = private)
         [videoObject, videoProps] = readVideoFile(this, videoFile)
         rightFrameIdx = getRightFrameIdx(this, frameIdx);
     end
-    
+
     methods(Static)
         [frame, isFrameValid] = readFrame(video, frameNumber);
         frameNumber = getFrameNumberFromTimestamp(videoProps, timestamp);
@@ -226,10 +226,10 @@ function [leftVideoFile, rightVideoFile, getImagesAt, lagParamsFile, ...
     parser.addRequired('lagParamsFile',  @(x)validateattributes(x, {'char'}, {'nonempty'}));
     parser.addRequired('mexopencvPath',  @(x)validateattributes(x, {'char'}, {'nonempty'}));
     parser.addRequired('outPath',  @(x)validateattributes(x, {'char'}, {'nonempty'}));
-   
+
     parser.addParameter('rotateRightVideo', false, @(x)validateattributes(x, {'logical'}, {'nonempty'}));
     parser.addParameter('rotateLeftVideo', false, @(x)validateattributes(x, {'logical'}, {'nonempty'}));
-        
+
     parser.parse(varargin{:});
 
     leftVideoFile = parser.Results.leftVideoFile;
@@ -238,7 +238,7 @@ function [leftVideoFile, rightVideoFile, getImagesAt, lagParamsFile, ...
     mexopencvPath = parser.Results.mexopencvPath;
     outPath = parser.Results.outPath;
     lagParamsFile = parser.Results.lagParamsFile;
-    
+
     rotateRightVideo = parser.Results.rotateRightVideo;
     rotateLeftVideo = parser.Results.rotateLeftVideo;
 end

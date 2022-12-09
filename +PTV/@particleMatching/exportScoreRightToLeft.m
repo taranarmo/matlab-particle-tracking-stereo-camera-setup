@@ -20,7 +20,7 @@ function this = exportScoreRightToLeft(this)
            id = rightIds(j);
            % find row if already exists (id -> I)
            I = find([this.scoreData.rightToLeft.rightParticleId] == id);
-           
+
            if(isempty(I))
                this.scoreData.rightToLeft(id).rightParticleId = id;
                this.scoreData.rightToLeft(id).data = table( ...

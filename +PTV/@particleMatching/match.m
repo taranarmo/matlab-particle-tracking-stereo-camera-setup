@@ -28,14 +28,14 @@ function this = match(this)
         % Get particles within the searching area
         searchingArea = [];
 %         searchingArea(:, 1) = [cL(1) 0 0 cL(1)];
-        
+
         % minX is the rectangle left edge
         if(~isnan(this.maxDisparity))
             minX = max([0 cL(1)-this.maxDisparity]);
         else
             minX = 0;
         end
-        
+
         % maxX is the rectangle right edge
         if(~isnan(this.minDisparity))
             maxX = min([cL(1) cL(1)-this.minDisparity]);
@@ -91,24 +91,24 @@ function this = match(this)
             maxCorr = round(max(abs(Icorr(:))), 5); % score
             candidates.score(l) = maxCorr;
         end
-        
+
         % count particle with template area > A for all candidates
         this.count.noScore = this.count.noScore + (isempty(candidates.score) && totalCanidates > 0);
-        
+
         % convert area to single from intX
         candidates.areaRatio = single(table2array(candidates(:, 'area'))) ./ ...
             single(table2array(this.leftParticles(row, 'area')));
-        
+
         if(this.debug)
             scoreTable = table(candidates.id, candidates.area, candidates.score, ...
                 candidates.areaRatio, false(height(candidates), 1), ...
                     false(height(candidates), 1), 'VariableNames', {'rightParticleId', 'area', ...
                     'score', 'areaRatio', 'possibleMatch', 'selected'});
-            
+
             this.scoreData.leftToRight(row).leftParticleId = this.leftParticles.id(row);
-            this.scoreData.leftToRight(row).data = scoreTable;            
+            this.scoreData.leftToRight(row).data = scoreTable;
         end
-        
+
         % Match the particle
         I = find(candidates.score >= this.minScore  & ...
             (candidates.areaRatio >= this.minAreaRatio & candidates.areaRatio <= this.maxAreaRatio));
@@ -122,15 +122,15 @@ function this = match(this)
         if(~isempty(I) && this.debug)
             this.scoreData.leftToRight(row).data.possibleMatch(I) = true;
         end
-        
+
         if(length(I) > 1)
             subset = candidates(I, :);
             matchedWidth = NaN;
-            
+
             % get particles with highest score, but only if there's one and
-            % the score is high enough to consider it a safe match    
-            % get particles with highest score, but only if there's only one 
-            % and its score is high enough to consider it as a safe match    
+            % the score is high enough to consider it a safe match
+            % get particles with highest score, but only if there's only one
+            % and its score is high enough to consider it as a safe match
             D = find(subset.score >= this.minScoreForMultipleMatches);
             if(~isempty(D) && length(D) == 1)
                 [~, D] = max(subset.score);
@@ -168,7 +168,7 @@ function this = match(this)
 
         end
     end
-    
+
     if(this.debug)
         this.scoreData.leftToRight = struct2table(this.scoreData.leftToRight);
     end

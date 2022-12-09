@@ -14,7 +14,7 @@ function this = computeRectificationError(this)
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
     this.epilines.left = [];
     this.epilines.right = [];
-    
+
     points.left = [];
     points.right = [];
 
@@ -33,8 +33,8 @@ function this = computeRectificationError(this)
         %     epilines1 = F^T * P2
 
         % Compute the epipolar lines in the left image using the points in the
-        % right image as reference. If F is the fundamental matrix of the pair 
-        % of cameras 1->2 then F' is the fundamental matrix of the pair in 
+        % right image as reference. If F is the fundamental matrix of the pair
+        % of cameras 1->2 then F' is the fundamental matrix of the pair in
         % the opposite order 2->1
         tmp = epipolarLine(F', corners.right);
         this.epilines.left = [this.epilines.left; tmp];

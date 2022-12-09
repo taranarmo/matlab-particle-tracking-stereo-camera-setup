@@ -4,14 +4,14 @@ function this = check(this, frameLeft, frameRight)
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
 
-    
+
     % convert to uint8 to improve the speed of disparity
     image.leftFrame = uint8(frameLeft);
     image.rightFrame = uint8(frameRight);
     image.merged = cat(2, image.leftFrame, image.rightFrame);
     image.merged = insertObjectAnnotation(image.merged, 'rectangle', [0 0 20 20], ...
         'Original frames', 'FontSize', 50);
-    
+
     %% Undistorted images - to check distortion coefficients
     image.leftUndistorted = undistortImage(image.leftFrame, ...
         this.stereoParams.CameraParameters1, 'OutputView', 'same');
@@ -24,7 +24,7 @@ function this = check(this, frameLeft, frameRight)
 
     figure;
     imshow(cat(1, image.merged, image.UndistortedMerged), 'InitialMagnification', 50);
-    
+
     %% Rectification
     fprintf('>> Rectification\n');
     [image.leftFrameRect, image.rightFrameRect] = ...
@@ -46,7 +46,7 @@ function this = check(this, frameLeft, frameRight)
     image.rectMerged = insertObjectAnnotation(image.rectMerged, 'rectangle', [0 0 20 20], ...
         'Rectified+epilines', 'FontSize', 50);
     imshow(image.rectMerged, 'InitialMagnification', 50);
-    
+
     imageSizeDepth = size(image.leftFrameRect, 3);
     isRGB = (imageSizeDepth == 3);
 
@@ -57,10 +57,10 @@ function this = check(this, frameLeft, frameRight)
         image.leftFrameGrey  = image.leftFrameRect;
         image.rightFrameGrey = image.rightFrameRect;
     end
-   
+
     warning('visionToolboxCalibration:imtool', ...
         'Make sure to set the correct value for config.maxDisparity using the imtool. This must be a mutiple of 16');
-    
+
     imtool(stereoAnaglyph(image.leftFrameRect, image.rightFrameRect));
 
     %% Disparity function uses -realmax('single') to mark pixels for which
@@ -72,26 +72,26 @@ function this = check(this, frameLeft, frameRight)
         'ContrastThreshold', this.disparityContrastThreshold, ...
         'UniquenessThreshold', this.disparityUniquenessThreshold, ...
         'DisparityRange', [0 this.disparityMax]);
-    
+
     % count pixels marked as invalid (see notes in reconstructScene)
     this.invalidDisparityCount = length(find(this.disparityMap == -realmax('single')));
     totalCount = numel(this.disparityMap);
     fprintf('>> %d/%d (%.2f%%) pixels have been marked as invalid\n', this.invalidDisparityCount, ...
         totalCount, this.invalidDisparityCount/totalCount*100);
 
-    % count pixels whose disparity is zero. The world coordinates will be 
+    % count pixels whose disparity is zero. The world coordinates will be
     % set to Inf by reconstructScene (see notes in reconstructScene)
     invalidCount = length(find(this.disparityMap == 0));
     fprintf('>> %d/%d (%.2f%%) pixels have 0 disparity, hence invalid (infinite) Z\n', invalidCount, ...
         totalCount, invalidCount/totalCount*100);
-    
+
     this.invalidXYZCount = this.invalidDisparityCount + invalidCount;
-    
+
     if(this.invalidXYZCount/totalCount > 0.5)
         warning('visionToolboxCalibration:invalidXYZ', ...
         'The calculated disparity map generates more than 50%% of invalid XYZ coordinates');
     end
-    
+
     % remove high values (invalid disparities). Apparently MATLAB does not
     % limit values to DisparityRange
     this.validDisparityMap = this.disparityMap;
@@ -108,9 +108,9 @@ function this = check(this, frameLeft, frameRight)
     cMap = colormap('gray');
     cMap = [0 1 0; cMap]; % associate colour to NaNs
     colormap(cMap);
-    
+
     title('Disparity Map');
-    
+
     %% Reconstruct the 3-D Scene
     fprintf('>> Reconstructing the 3D scene\n');
     % Disparity function uses -realmax('single') to mark pixels for which

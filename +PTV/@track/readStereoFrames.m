@@ -2,7 +2,7 @@ function [this] = readStereoFrames(this, kSubL, kSubR)
 %SETFRAMENUMBER returns the specified frames from both cameras.
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
     this.step.isLeftFrameValid = true;
     this.step.isRightFrameValid = true;
 
@@ -10,18 +10,18 @@ function [this] = readStereoFrames(this, kSubL, kSubR)
     % frameIdx+1
     this.video.left.set('PosFrames', kSubL-1);
     this.video.right.set('PosFrames', kSubR-1);
-    
+
     this.step.leftFrame = this.video.left.read();
     this.step.rightFrame = this.video.right.read();
-    
-    if(isempty(this.step.leftFrame))    
+
+    if(isempty(this.step.leftFrame))
         this.step.isLeftFrameValid = false;
     end
-    
-    if(isempty(this.step.rightFrame))    
+
+    if(isempty(this.step.rightFrame))
         this.step.isRightFrameValid = false;
     end
-    
+
     % Rotate frames if needed
     if(this.rotateLeftFrame)
         this.step.leftFrame = imrotate(this.step.leftFrame, 180);

@@ -26,7 +26,7 @@ function [this] = exportSettings(this)
             data.CameraParameters1 = rmfield(data.CameraParameters1, 'TranslationVectors');
             data.CameraParameters1 = rmfield(data.CameraParameters1, 'RotationVectors');
             data.CameraParameters1 = rmfield(data.CameraParameters1, 'ReprojectionErrors');
-            
+
             data.CameraParameters2 = rmfield(data.CameraParameters2, 'WorldPoints');
             data.CameraParameters2 = rmfield(data.CameraParameters2, 'TranslationVectors');
             data.CameraParameters2 = rmfield(data.CameraParameters2, 'RotationVectors');
@@ -36,7 +36,7 @@ function [this] = exportSettings(this)
         end
         S.(var) = this.(var);
     end
-    
+
     fileName = sprintf('settings_%s.yml', this.dateFmt);
     fileName = fullfile(this.logFolder, fileName);
     cv.FileStorage(fileName, S);

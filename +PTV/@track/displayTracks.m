@@ -2,7 +2,7 @@ function [] = displayTracks(this)
 %DISPLAYTRACKS Displays tracking results.
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
     % Convert the frame to uint8 RGB.
     this.step.leftFrame = im2uint8(this.step.leftFrame);
     % Convert the mask from logical RGB (b/w)
@@ -14,7 +14,7 @@ function [] = displayTracks(this)
     minVisibleCount = 8;
     if(~isempty(this.step.tracks) && ~isempty(this.system))
         % Noisy detections tend to result in short-lived tracks.
-        % Only display tracks that have been visible for more than 
+        % Only display tracks that have been visible for more than
         % a minimum number of frames.
         reliableTrackInds = this.step.tracks.totalVisibleCount > minVisibleCount;
         reliableTracks = this.step.tracks(reliableTrackInds, :);
@@ -29,9 +29,9 @@ function [] = displayTracks(this)
             ids = int32(reliableTracks.id)';
 
             cols = vertcat(reliableTracks.colour);
-            
-            % Create labels for objects indicating the ones for 
-            % which we display the predicted rather than the actual 
+
+            % Create labels for objects indicating the ones for
+            % which we display the predicted rather than the actual
             % location.
             labels = cellstr(int2str(ids'));
             % for not assigned track, the location is not replaced with the
@@ -76,7 +76,7 @@ function [] = displayTracks(this)
                 'TextColor', 'black');
         end
     end
-    
+
     % Print number of tracked particles on screen
     t = this.step.leftFrameId/this.video.originalFrameRate;
     mins = floor(t/60);
@@ -84,14 +84,14 @@ function [] = displayTracks(this)
     this.step.leftMask = insertText(this.step.leftMask, [5 7], ...
         sprintf('V%d %s - %d/%d tracks', this.step.fileIndex.left, ...
         timestamp, height(reliableTracks), height(this.step.tracks)), ...
-        'TextColor', 'white', 'FontSize', 30, 'BoxColor', 'red');  
+        'TextColor', 'white', 'FontSize', 30, 'BoxColor', 'red');
     this.step.leftFrame = insertText(this.step.leftFrame, [5 7], ...
         sprintf('V%d %s -  %d/%d tracks', this.step.fileIndex.left, ...
         timestamp, height(reliableTracks), height(this.step.tracks)), ...
         'TextColor', 'white', 'FontSize', 30, 'BoxColor', 'blue');
-    
+
     % Update the players
-    this.video.maskPlayer.step(this.step.leftMask);        
+    this.video.maskPlayer.step(this.step.leftMask);
     this.video.videoPlayer.step(this.step.leftFrame);
 end
 

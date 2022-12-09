@@ -65,5 +65,5 @@ function this = progressWindow(this)
         this.GUI.labels.global.(tags{l}) = uicontrol('Style', 'text',...
             'Parent', this.GUI.globalPanel, 'Unit', 'normalized', 'Position', [0.5 y-0.22*l 0.45 0.3], ...
             'String', '', 'FontSize', 13, 'HorizontalAlignment', 'left');
-    end                 
+    end
 end

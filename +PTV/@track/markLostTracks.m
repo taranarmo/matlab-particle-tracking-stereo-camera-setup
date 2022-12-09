@@ -16,7 +16,7 @@ function [this] = markLostTracks(this)
         rows = find((ages >= s.ageMin &  ages < s.ageMax & ...
             visibility < s.visibilityRatio) | ...
             consecutiveInvisibleCount >= s.invisibleForTooLong);
-        
+
         if(~isempty(rows))
             % Delete track from the step object so that the Kalman filter
             % stops tracking the track

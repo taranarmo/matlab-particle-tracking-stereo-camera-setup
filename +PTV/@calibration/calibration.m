@@ -23,7 +23,7 @@ classdef calibration
 %
 %                           Default: 'cal'
 %
-%   'exclude'               Frame IDs to exclude from the calibration set. For 
+%   'exclude'               Frame IDs to exclude from the calibration set. For
 %                           example to exclude images 'f1' and 'f4', use [1
 %                           4]. This is useful to exclude frames with high
 %                           reprojection errors.
@@ -40,14 +40,14 @@ classdef calibration
 %                           frame pair not belonging to the calibration set
 %                           by calling the 'check' method.
 %
-%                           Default: first frame included in the calibration 
+%                           Default: first frame included in the calibration
 %                           set. The set includes frames with detected
 %                           checkerboard corners and includes frames that
 %                           have not been exluded with the 'Exclude'
 %                           setting.
 %
-%   'disparityBlockSize':   Width of each square block whose pixels 
-%                           are used for comparison between the images. 
+%   'disparityBlockSize':   Width of each square block whose pixels
+%                           are used for comparison between the images.
 %
 %                           Default: 15. Max: 255. Min: 5.
 %
@@ -55,24 +55,24 @@ classdef calibration
 %                           at least once to measure the maximum distance
 %                           using the imtool from the stereo anaglyph.
 %
-%                           Default: 64. 
+%                           Default: 64.
 %
 %   'disparityContrastThreshold'   Acceptable range of contrast values.
 %                                  Increasing this parameter results in
-%                                  fewer pixels being marked as unreliable. 
+%                                  fewer pixels being marked as unreliable.
 %
-%                                  Default: 0.5. Max: 1. Min: 0. 
+%                                  Default: 0.5. Max: 1. Min: 0.
 %
-%   'disparityUniquenessThreshold'  Minimum value of uniqueness. Increasing 
-%                                   this parameter results in the function 
-%                                   marking more pixels unreliable. When the 
-%                                   uniqueness value for a pixel is low, the 
+%   'disparityUniquenessThreshold'  Minimum value of uniqueness. Increasing
+%                                   this parameter results in the function
+%                                   marking more pixels unreliable. When the
+%                                   uniqueness value for a pixel is low, the
 %                                   disparity computed for it is less reliable.
 %
 %                                  Default: 15.
 %
 %   obj = calibration.calibration(...) returns a calibration
-%     object containing the output of the calibration. 
+%     object containing the output of the calibration.
 %
 %  calibration properties:
 %
@@ -95,7 +95,7 @@ classdef calibration
 %      imagesUsed    - Frames where the pattern was detected. See detectCheckerboardPoints
 %      imageSize     - Size of the frame in pixels
 %      totalFrames   - Total number of valid and non-excluded frames used in
-%                       the calibration set. 
+%                       the calibration set.
 %
 %      Calibration output
 %      ------------------------------------------------------
@@ -121,19 +121,19 @@ classdef calibration
 %      plotErrors           - Plot reprojection and rectification histograms.
 %      plotPatternLocations - Plot 3D location of checkerboards.
 %      plotCameraModel      - Plot the camera models (accounting for radial and
-%                             tangential distortions) and the relative position 
+%                             tangential distortions) and the relative position
 %                             of the two cameras.
 %      plotSummary          - Run the 3 above methods together.
 %      plot3DScene          - Plot the 3D scene of 'CheckFrameNumber' frame.
-%      plotDiscardedFrames  - Plot frames where the checkerboard corners were 
+%      plotDiscardedFrames  - Plot frames where the checkerboard corners were
 %                             not fully detected.
 %      plotExcludedFrames   - Check which frames were excluded with the 'Exclude' option.
 %      check                - Check that the calibration works by correctly
 %                             estimating the disparity map and reproducing
 %                             the 3D scene for a provided frame pair.
-%      compareRectifiedChequerboards - Compare rectified frames containing the 
+%      compareRectifiedChequerboards - Compare rectified frames containing the
 %                                      chequerboards used in the calibration.
-%                                       Chequer edges should be row-aligned 
+%                                       Chequer edges should be row-aligned
 %                                       according to epipolar geometry.
 %
 %AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
@@ -141,22 +141,22 @@ classdef calibration
     properties (GetAccess = public, SetAccess = private)
         % Path to files from left camera
         imagesLeftAll
-        
+
         % Path to files from right camera
         imagesRightAll
-        
+
         % Path to + files from right camera
         imagesRightAllPlus
-        
+
         % Path to - files from right camera
         imagesRightAllMinus
-        
+
         % File names in the path
         fileNamesAll
-        
+
         % File names in the calibration set
         fileNames
-        
+
         % Detected points in frames from left camera
         imagePointsLeft
 
@@ -165,52 +165,52 @@ classdef calibration
 
         % Detected points from left cameras and fixed points from right camera
         imagePoints
-        
+
         % Number of rows and columns in checkerboard
         boardSize
-        
+
         % Size of the frame in pixels
         imageSize
-        
+
         % Total number of valid and non-excluded frames used in the calibration set
         totalFrames
-        
+
         % Real world points of checkerboard
         worldPoints
-        
+
         % Calibration parameters
         stereoParams
-        
+
         % Frames used in the calibration
         pairsUsed
-        
+
         % Calibration errors
         estimationErrors
-        
+
         % Rectification errors
         rectificationError
-        
+
         % Epipolar lines
         epilines
-        
+
         % Disparity map for 'CheckFrameNumber'
         disparityMap
-        
+
         % Valid values of disparity map for 'CheckFrameNumber'
         validDisparityMap
-        
+
         % Number of invalid pixels in the disparity map
         invalidDisparityCount
-        
+
         % Number of invalid world points in the 3D scen
         invalidXYZCount
-        
+
         % Size of rectified frames
         imageSizeRect
-        
+
         % points3D as pointCloud object
         ptCloud
-        
+
         % World coordinates (metres) of the points from 'CheckFrameNumber'
         points3D
 
@@ -222,7 +222,7 @@ classdef calibration
     properties (GetAccess = private, SetAccess = private)
         % Frames from the left camera frames where the pattern was detected.
         imagesUsedL
-    
+
         % Frames from the right camera frames where the pattern was detected.
         imagesUsedR
 
@@ -237,7 +237,7 @@ classdef calibration
 
         % Path to data from PTV.syncVideos or PTV.parSyncVideos
         lagParamsFile
-        
+
         % Save plots with calibration results
         saveSummary
 
@@ -247,36 +247,36 @@ classdef calibration
         % Detected points in frames from right camera (- frames)
         imagePointsRightMinus
     end
-    
+
     properties (Access = public)
         % Path where the frames are
         framesPath
-        
+
         % Size of the checkeboard square in mm
         squareSize
-        
+
         % Name of the calibration
         name
-        
+
         % Frame IDs to exclude from the calibration set
         exclude
-        
-        % Frame number to use to verify the calibration 
+
+        % Frame number to use to verify the calibration
         checkFrameNumber
-        
+
         % Maximum value of disparity
         disparityMax
-        
+
         % Width of each square block for the disparity calculation
         disparityBlockSize
-        
+
         % Acceptable range of contrast values for the disparity calculation
         disparityContrastThreshold
-        
+
         % Minimum value of uniqueness
         disparityUniquenessThreshold
     end
-    
+
     methods
         %==================================================================
         % Constructor
@@ -287,11 +287,11 @@ classdef calibration
         % obj = calibration(..., 'SaveSummary', false);
         % obj = calibration(..., 'CheckFrameNumber', int8(14));
         % obj = calibration(..., 'DisparityConfig', struct('method', 'SemiGlobal'));
-        function this = calibration(varargin)            
+        function this = calibration(varargin)
             [this.framesPath, this.squareSize, this.lagParamsFile, this.name, this.exclude, ...
                 this.saveSummary, this.checkFrameNumber, this.disparityBlockSize, ...
                 this.disparityContrastThreshold, this.disparityUniquenessThreshold, ...
-                this.disparityMax] = validateAndParseInputs(varargin{:}); 
+                this.disparityMax] = validateAndParseInputs(varargin{:});
 
             if(~exist(this.lagParamsFile, 'file'))
                 error('File ''%s'' does not exist', this.lagParamsFile);
@@ -301,21 +301,21 @@ classdef calibration
             % workspace names
             pointsBaseFileName = sprintf('%s_corners.mat', this.name);
             pointsFullName = fullfile(this.framesPath, pointsBaseFileName);
-    
+
             % workspace names
             calibrationBaseFileName = sprintf('%s_data.mat', this.name);
             calibrationFullName = fullfile(this.framesPath, calibrationBaseFileName);
- 
-            if(~exist(pointsFullName, 'file'))                
+
+            if(~exist(pointsFullName, 'file'))
                 this = loadImagePairs(this);
                 fprintf('>> Found %d image pairs\n', length(this.fileNamesAll));
-                
+
                 if(length(this.fileNames) < 10)
                     warning('calibration:notEnoughtFrames', ...
                         ['You need at least 10 image pairs to properly ' ...
                         'calibrate the cameras']);
                 end
-                
+
                 this = detectCorners(this);
                 this.exportCorners(pointsFullName);
             else
@@ -374,7 +374,7 @@ classdef calibration
             % Exclude files
             fprintf('>> Excluding %d pairs\n', length(this.exclude));
             this = this.excludeFrames();
-            
+
             this.totalFrames = size(this.imagePointsLeft, 3);
             if(this.totalFrames < 10)
                 warning('calibration:notEnoughtFrames', ...
@@ -385,7 +385,7 @@ classdef calibration
             %% Fix coordinates for points in right cameras
             this = this.fixRightCoordinates();
 
-            % build matrix for stereo system 
+            % build matrix for stereo system
             % M-by-2-by-numPairs-by-2 array of [x, y] points.
             this.imagePoints(:, :, :, 1) = this.imagePointsLeft;
             this.imagePoints(:, :, :, 2) = this.imagePointsRight;
@@ -399,7 +399,7 @@ classdef calibration
                 'InitialIntrinsicMatrix', [], 'InitialRadialDistortion', [], ...
                 'ImageSize', this.imageSize);
 
-            
+
             if(this.stereoParams.MeanReprojectionError > 1)
                 warning('calibration:reprojectionError', ...
                     ['The mean reprojection error is high (%.2fpx). Try removing ' ...
@@ -409,7 +409,7 @@ classdef calibration
             end
 
             this = this.computeRectificationError();
-            
+
             if(this.rectificationError.mean > 1)
                 warning('calibration:rectificationError', ...
                     ['The mean rectification error is high (%.2fpx). The ' ...
@@ -418,7 +418,7 @@ classdef calibration
                     'to acquire the frames at the same time from both cameras.'], ...
                     this.rectificationError.mean);
             end
-            
+
             % Plot summary
             fprintf('>> Plotting calibration summary\n');
             h = plotSummary(this);
@@ -431,10 +431,10 @@ classdef calibration
                 print(h.cameraModel, '-dpng', fullfile(this.framesPath, ...
                     sprintf('%s_camera_model.png', this.name)));
             end
-            
+
             % Verify calibration
             fprintf('>> Verification\n');
-            
+
             % find correct frame
             if(isempty(this.checkFrameNumber)) % get first available frame
                 tmp = strsplit(this.fileNames{1}, 'f');
@@ -452,8 +452,8 @@ classdef calibration
             % Save
             calibrationData = this;
             save(calibrationFullName, 'calibrationData');
-            
-            fprintf('>> Done. Saved calibration parameters in ''%s''\n', calibrationBaseFileName);            
+
+            fprintf('>> Done. Saved calibration parameters in ''%s''\n', calibrationBaseFileName);
         end
 
         function s = toStruct(this)
@@ -478,7 +478,7 @@ classdef calibration
                 end
             end
         end
-        
+
         % External method declaration
         h = plotSummary(this);
         h = plotErrors(this);
@@ -490,7 +490,7 @@ classdef calibration
         h = plotExcludedFrames(this);
         [] = compareRectifiedChequerboards(this);
     end
-    
+
     methods(Access = private)
         function frameIdx = findFrameById(this)
             % Find frame index in the provided set
@@ -503,7 +503,7 @@ classdef calibration
                     '''Exclude'' option or no pattern was found in it'], this.checkFrameNumber);
             end
         end
-        
+
         % External method declaration
         this = loadImagePairs(this);
         this = detectCorners(this);
@@ -531,12 +531,12 @@ function [framesPath, squareSize, lagParamsFile, name, exclude, saveSummary, che
     parser.addParameter('exclude', [], @(x)validateattributes(x, {'numeric'}, {'row', '>=', 0}));
     parser.addParameter('saveSummary', true, @(x)validateattributes(x, {'logical'}, {'nonempty'}));
     parser.addParameter('checkFrameNumber',  [], @(x)validateattributes(x, {'numeric'}, {'real', 'scalar', 'integer'}));
-    
+
     parser.addParameter('disparityBlockSize',  15, @(x)validateattributes(x, {'numeric'}, {'real', 'scalar', 'integer', 'odd', '>=', 5,'<=',255}));
     parser.addParameter('disparityContrastThreshold',  0.5, @(x)validateattributes(x, {'numeric'}, {'real', 'scalar', '>=',0,'<=',1}));
     parser.addParameter('disparityUniquenessThreshold',  15, @(x)validateattributes(x, {'numeric'}, {'real', 'scalar', '>=', 0}));
     parser.addParameter('disparityMax', 64, @(x)validateattributes(x, {'numeric'},{'real', 'scalar', '>=', 1}));
-        
+
     parser.parse(varargin{:});
 
     framesPath = parser.Results.framesPath;

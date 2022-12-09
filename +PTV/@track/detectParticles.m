@@ -23,7 +23,7 @@ function [this] = detectParticles(this)
         ax_mj, ax_mn, or, ecc, r2, per);
     this.step.rightParticles.Properties.VariableNames{1} = 'id';
     this.step.rightParticles.area = double(this.step.rightParticles.area);
-    
+
     this.logStatus(sprintf('Step #%d - Left frame found %d particles - Right frame found %d particles', ...
         this.step.counter, height(this.step.leftParticles), ...
         height(this.step.rightParticles)), false);
@@ -33,7 +33,7 @@ function [this] = detectParticles(this)
         this.logStatus(sprintf('[!!] Step #%d - Reached the limit for maximum detectable particles in left frame (%d)', ...
             this.step.counter, maxParticles), false);
     end
-    
+
     if(height(this.step.rightParticles) >= maxParticles)
         this.logStatus(sprintf('[!!] Step #%d - Reached the limit for maximum detectable particles in right frame (%d)', ...
             this.step.counter, maxParticles), false);

@@ -13,7 +13,7 @@ function [str] = formatDuration(durationInSecs)
     if(isa(durationInSecs, 'double'))
         durationInSecs = seconds(durationInSecs);
     end
-        
+
     str = duration(durationInSecs, 'Format', 'hh:mm:ss');
 end
 

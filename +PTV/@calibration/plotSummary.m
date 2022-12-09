@@ -7,10 +7,10 @@ function h = plotSummary(this)
 %    h.cameraModel       - Plot of cameras model                      [Figure]
 %
 % AUTHOR: Stefano Simoncelli <simoncelli@igb-berlin.de>
-    
+
     % Reprojection errors
     h.error = this.plotErrors();
-    
+
     % Pattern locations
     h.patternLocation = this.plotPatternLocations();
 

@@ -1,5 +1,5 @@
 function [] = compareRectifiedChequerboards(this)
-% COMPARERECTIFIEDCHEQUERBOARDS Compare rectified frames containing the 
+% COMPARERECTIFIEDCHEQUERBOARDS Compare rectified frames containing the
 % chequerboards used in the calibration.
 % Chequer edges should be row-aligned according to epipolar geometry.
 % If this is not the case, the calibration is not correct.
